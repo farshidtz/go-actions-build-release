@@ -48,6 +48,7 @@ jobs:
         path: ${{ matrix.name }}
         
     - name: Upload releases
+      if: startsWith(github.ref, 'refs/tags/') # on tag
       uses: svenstaro/upload-release-action@v1-release
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
