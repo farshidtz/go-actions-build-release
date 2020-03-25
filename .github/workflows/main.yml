@@ -6,17 +6,22 @@ jobs:
 
     strategy:
       matrix:
-        os: [linux, darwin, windows]
-        arch: [amd64, arm64, arm]
-        exclude:
-          - os: darwin
+        include:
+          - name: main-linux-amd64
+            os: linux
+            arch: amd64
+          - name: main-linux-arm64
+            os: linux
             arch: arm64
-          - os: darwin
+          - name: main-linux-arm
+            os: linux
             arch: arm
-          - os: windows
-            arch: arm64
-          - os: windows
-            arch: arm
+          - name: main-darwin-amd54
+            os: darwin
+            arch: amd64
+          - name: main-windows-amd64
+            os: windows
+            arch: amd64
 
     runs-on: ubuntu-latest
 
@@ -28,19 +33,18 @@ jobs:
       uses: actions/checkout@v2
       
     - name: Build project
-      run: go build -o main-${{ matrix.os }}-${{ matrix.arch }} main.go
+      run: go build -o ${{ matrix.name }} main.go
       env:
-        GOOS: ${{ matrix.go-os }}
-        GOARCH: ${{ matrix.go-arch }}
+        GOOS: ${{ matrix.os }}
+        GOARCH: ${{ matrix.arch }}
         
     - name: Upload snapshots
       uses: actions/upload-artifact@v1.0.0
       with:
         # Artifact name
-        name: main-${{ matrix.os }}-${{ matrix.arch }}
+        name: ${{ matrix.name }}
         # Directory containing files to upload
-        path: main-${{ matrix.os }}-${{ matrix.arch }}
-        
+        path: ${{ matrix.name }}
         
     - name: Upload releases
       uses: svenstaro/upload-release-action@v1-release
