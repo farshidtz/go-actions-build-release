@@ -49,3 +49,4 @@ jobs:
         file: main-*
         tag: ${{ github.ref }}
         overwrite: true
+        file_glob: true
