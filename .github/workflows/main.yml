@@ -6,7 +6,6 @@ jobs:
 
     strategy:
       matrix:
-        go-version: [1.12.x, 1.14.x]
         go-os: [linux, darwin, windows]
         go-arch: [amd64]
     runs-on: ubuntu-latest
@@ -14,12 +13,19 @@ jobs:
     steps:
     - name: Install Go
       uses: actions/setup-go@v1
-      with:
-        go-version: ${{ matrix.go-version }}
+      
     - name: Checkout code
       uses: actions/checkout@v2
+      
     - name: Build
-      run: go build main.go && ls -l
+      run: go build main.go -o main-${{ matrix.go-os }}-${{ matrix.go-arch }}
       env:
         GOOS: ${{ matrix.go-os }}
         GOARCH: ${{ matrix.go-arch }}
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        # Artifact name
+        name: main-${{ matrix.go-os }}-${{ matrix.go-arch }}
+        # Directory containing files to upload
+        path: main-${{ matrix.go-os }}-${{ matrix.go-arch }}
