@@ -7,12 +7,16 @@ jobs:
     strategy:
       matrix:
         os: [linux, darwin, windows]
-        arch: [amd64, arm64]
+        arch: [amd64, arm64, arm]
         exclude:
           - os: darwin
             arch: arm64
+          - os: darwin
+            arch: arm
           - os: windows
             arch: arm64
+          - os: windows
+            arch: arm
 
     runs-on: ubuntu-latest
 
@@ -36,3 +40,13 @@ jobs:
         name: main-${{ matrix.go-os }}-${{ matrix.go-arch }}
         # Directory containing files to upload
         path: main-${{ matrix.go-os }}-${{ matrix.go-arch }}
+        
+        
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v1-release
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: main-${{ matrix.go-os }}-${{ matrix.go-arch }}
+        asset_name: main-${{ matrix.go-os }}-${{ matrix.go-arch }}
+        tag: ${{ github.ref }}
+        overwrite: true
