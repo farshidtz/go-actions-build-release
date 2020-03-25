@@ -6,6 +6,7 @@ jobs:
 
     strategy:
       matrix:
+        name: [main-linux-amd64, main-linux-arm64, main-linux-arm, main-darwin-amd64, main-windows-amd64]
         include:
           - name: main-linux-amd64
             os: linux
