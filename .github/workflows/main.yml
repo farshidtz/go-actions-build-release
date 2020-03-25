@@ -27,13 +27,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
       
-    - name: Build
+    - name: Build project
       run: go build -o main-${{ matrix.go-os }}-${{ matrix.go-arch }} main.go
       env:
         GOOS: ${{ matrix.go-os }}
         GOARCH: ${{ matrix.go-arch }}
         
-    - name: Upload artifact
+    - name: Upload snapshots
       uses: actions/upload-artifact@v1.0.0
       with:
         # Artifact name
@@ -42,11 +42,10 @@ jobs:
         path: main-${{ matrix.go-os }}-${{ matrix.go-arch }}
         
         
-    - name: Upload binaries to release
+    - name: Upload releases
       uses: svenstaro/upload-release-action@v1-release
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: main-${{ matrix.go-os }}-${{ matrix.go-arch }}
-        asset_name: main-${{ matrix.go-os }}-${{ matrix.go-arch }}
+        file: main-*
         tag: ${{ github.ref }}
         overwrite: true
