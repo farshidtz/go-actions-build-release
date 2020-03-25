@@ -17,14 +17,14 @@ jobs:
           - name: main-linux-arm
             os: linux
             arch: arm
-          - name: main-darwin-amd54
+          - name: main-darwin-amd64
             os: darwin
             arch: amd64
           - name: main-windows-amd64
             os: windows
             arch: amd64
 
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-latest
 
     steps:
     - name: Install Go
