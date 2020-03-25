@@ -6,23 +6,13 @@ jobs:
 
     strategy:
       matrix:
-        name: [main-linux-amd64, main-linux-arm64, main-linux-arm, main-darwin-amd64, main-windows-amd64]
+        os: [linux, darwin, windows]
+        arch: [amd64]
         include:
-          - name: main-linux-amd64
-            os: linux
-            arch: amd64
-          - name: main-linux-arm64
-            os: linux
+          - os: linux
             arch: arm64
-          - name: main-linux-arm
-            os: linux
+          - os: linux
             arch: arm
-          - name: main-darwin-amd54
-            os: darwin
-            arch: amd64
-          - name: main-windows-amd64
-            os: windows
-            arch: amd64
 
     runs-on: ubuntu-latest
 
@@ -34,7 +24,7 @@ jobs:
       uses: actions/checkout@v2
       
     - name: Build project
-      run: go build -o ${{ matrix.name }} main.go
+      run: go build -o main-${{ matrix.os }}-${{ matrix.arch }} main.go
       env:
         GOOS: ${{ matrix.os }}
         GOARCH: ${{ matrix.arch }}
@@ -43,9 +33,9 @@ jobs:
       uses: actions/upload-artifact@v1.0.0
       with:
         # Artifact name
-        name: ${{ matrix.name }}
+        name: main-${{ matrix.os }}-${{ matrix.arch }}
         # Directory containing files to upload
-        path: ${{ matrix.name }}
+        path: main-${{ matrix.os }}-${{ matrix.arch }}
         
     - name: Upload releases
       if: startsWith(github.ref, 'refs/tags/') # on tag
