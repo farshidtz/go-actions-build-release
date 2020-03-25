@@ -6,7 +6,7 @@ jobs:
 
     strategy:
       matrix:
-        go-os: [linux, darwin, windows]
+        go-os: [linux]
         go-arch: [amd64]
     env:
       name: main-${{ matrix.go-os }}-${{ matrix.go-arch }}
@@ -21,7 +21,7 @@ jobs:
       uses: actions/checkout@v2
       
     - name: Build
-      run: go build -o $name main.go
+      run: go build -o ${{name}} main.go
       env:
         GOOS: ${{ matrix.go-os }}
         GOARCH: ${{ matrix.go-arch }}
@@ -29,6 +29,6 @@ jobs:
       uses: actions/upload-artifact@v1.0.0
       with:
         # Artifact name
-        name: $name
+        name: ${{name}}
         # Directory containing files to upload
-        path: $name
+        path: ${{name}}
